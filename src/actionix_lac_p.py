@@ -1,4 +1,4 @@
-from ctypes import *
+from ctypes import WinDLL
 import sys
 
 # Control Command Constants (Expanded)
@@ -24,7 +24,20 @@ DISABLE_MANUAL = 0x30
 RESET = 0xFF
 
 # Default Configuration (Update with your device's details)
-DEFAULT_VID_PID = b"vid_1ffb&pid_0002"  # Actuonix Vendor/Product ID
+# Actuonix Vendor/Product ID
+# Windows "Device Manager" -> "Custom USB Devices" -> "WinUSB Devices"
+# -> "Hardware Ids" -> "USB\VID_04D8&PID_FC5F"
+DEFAULT_VID_PID = b"vid_04d8&pid_fc5f"
+ALTERNATIVE_IDS = [
+    b"vid_04d8&pid_000c",  # Secondary
+    b"vid_04d8&pid_01f0",
+    b"vid_04d8&pid_01f1",
+    b"vid_04d8&pid_01f2",
+    b"vid_04d8&pid_01f3",
+    b"vid_04d8&pid_01f4",
+    b"vid_04d8&pid_01f5",
+    b"vid_04d8&pid_01f6"
+]
 DEFAULT_ENDPOINT_OUT = b"\\MCHP_EP1"  # OUT endpoint
 DEFAULT_ENDPOINT_IN = b"\\MCHP_EP2"  # IN endpoint
 
@@ -33,7 +46,7 @@ class ActuonixLAC:
     def __init__(self, vid_pid=DEFAULT_VID_PID, instance=0):
         self.vid_pid = vid_pid
         self.instance = instance
-        self.dll = windll.LoadLibrary("mpusbapi.dll")
+        self.dll = WinDLL(r"C:\Program Files (x86)\Actuonix LAC Configuration Utility\mpusbapi.dll")
         self._setup_function_prototypes()
         self.INHandle = None
         self.OUTHandle = None
@@ -187,10 +200,10 @@ if __name__ == "__main__":
 
         # Example usage
         print("Current position:", lac.get_feedback())
-        lac.set_position(512)  # Move to midpoint
-        lac.set_speed(800)  # Set movement speed
-        lac.set_pid(500, 300)  # Tune PID values
-        lac.save_config()  # Save settings
+        # lac.set_position(512)  # Move to midpoint
+        # lac.set_speed(800)  # Set movement speed
+        # lac.set_pid(500, 300)  # Tune PID values
+        # lac.save_config()  # Save settings
 
     except Exception as e:
         print(f"Error: {e}", file=sys.stderr)
