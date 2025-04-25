@@ -198,11 +198,12 @@ if __name__ == "__main__":
         lac.set_accuracy(value=motor_accuracy)
         print(f"Speed set to {motor_speed}, accuracy to {(1-motor_accuracy/1024):.2f}.")
 
-        for pos in [8, 512, 1015]:
-            lac.set_position(pos)   # Move to start
-            print(f"Movint position (0, 1023) to {pos}.")
-            time.sleep(5)
-            print("Current position:", lac.get_feedback())
+        while True:
+            for pos in [90, 500, 950]:
+                lac.set_position(pos)   # Move to start
+                print(f"Movint position (0, 1023) to {pos}.")
+                time.sleep(5)
+                print("Current position:", lac.get_feedback())
 
     except Exception as e:
         print(f"Error: {e}", file=sys.stderr)
