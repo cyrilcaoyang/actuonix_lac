@@ -17,7 +17,7 @@ Connect the actuator to the LAC and the LAC to your computer using a mini-USB ca
    
    for conda:
    
-        conda install -c conda-forge libusb
+        conda install -c conda-forge pyusb libusb
    for pip:
 
         pip install libusb
